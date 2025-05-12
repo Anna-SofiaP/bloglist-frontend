@@ -11,9 +11,10 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
       setBlogs( blogs )
-    )  
+      console.log("The blogs are: ", blogs)
+    })  
   }, [])
 
   const handleLogin = async (event) => {
@@ -22,6 +23,9 @@ const App = () => {
 
     try {
       const user = await loginService.login({username, password})
+      console.log("Logged in user: ", user)
+
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -65,12 +69,13 @@ const App = () => {
 
   return (
     <div>
-      <h2>Welcome, {user.name}! Here are your blogs</h2>
+      <h2>Welcome, {user.name}! Here is the list of blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
     </div>
   )
 }
+
 
 export default App
