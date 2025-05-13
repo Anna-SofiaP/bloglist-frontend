@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import CreateNewBlog from './components/CreateNewBlog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -9,6 +10,10 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -56,6 +61,36 @@ const App = () => {
     setUser(null)
   }
 
+  const handleCreateNewBlog = async (event) => {
+    event.preventDefault()
+    console.log("Creating a new blog post:", title, author, url)
+
+    try {
+      const newBlog = {
+        title: title,
+        author: author,
+        url: url,
+        likes: 0
+      }
+
+      const blog = await blogService.create(newBlog)
+        .then(returnedBlog => {
+          setBlogs(blogs.concat(returnedBlog))
+          setTitle('')
+          setAuthor('')
+          setUrl('')
+        })
+      console.log("New blog was added: ", blog)
+
+    } catch (exception) {
+      console.log("Error in creating a new blog: ", exception)
+      setErrorMessage('could not create blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   if (user == null) {
     return (
       <div>
@@ -88,11 +123,23 @@ const App = () => {
 
   return (
     <div>
-      <h2>Welcome, {user.name}! Here is the list of blogs</h2>
+      <h2>Welcome, {user.name}!</h2>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+
+      <h3>Create a new blog</h3>
+      <CreateNewBlog 
+        createNewBlog={handleCreateNewBlog}
+        setTitle={setTitle} 
+        setAuthor={setAuthor}
+        setUrl={setUrl}
+      />
+
+      <h3>List of blogs</h3>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
-      <p style={{marginTop: 20}}>Log out from the blog app:</p>
+
+      <h3 style={{marginTop: 20}}>Log out</h3>
       <button onClick={handleLogOut}>Log Out</button>
     </div>
   )
