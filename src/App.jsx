@@ -10,6 +10,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [message, setMessage] = useState('')
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -76,9 +77,13 @@ const App = () => {
       const blog = await blogService.create(newBlog)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
+          setMessage('Blog ' + newBlog.title + ' by ' + newBlog.author + ' was added!')
           setTitle('')
           setAuthor('')
           setUrl('')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
       console.log("New blog was added: ", blog)
 
@@ -95,6 +100,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to view your blogs</h2>
+        {errorMessage && <p className='error'>{errorMessage}</p>}
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -116,7 +122,6 @@ const App = () => {
           </div>
           <button type="submit">login</button>
         </form>
-        {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       </div>
     )
   }
@@ -124,7 +129,8 @@ const App = () => {
   return (
     <div>
       <h2>Welcome, {user.name}!</h2>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {errorMessage && <p className='error'>{errorMessage}</p>}
+      {message && <p className='msg'>{message}</p>}
 
       <h3>Create a new blog</h3>
       <CreateNewBlog 

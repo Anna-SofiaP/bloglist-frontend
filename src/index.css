@@ -1,0 +1,19 @@
+.error {
+    color: red;
+    border-style: solid;
+    border-color: red;
+    padding: 10px;
+    max-width: fit-content;
+    border-width: 1px;
+    border-radius: 15px;
+}
+
+.msg {
+    color: green;
+    border-style: solid;
+    border-color: green;
+    padding: 10px;
+    max-width: fit-content;
+    border-width: 1px;
+    border-radius: 15px;
+}
