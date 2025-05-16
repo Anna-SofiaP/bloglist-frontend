@@ -128,7 +128,7 @@ const App = () => {
 
       <h3>List of blogs</h3>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog}/>
       )}
 
       <h3 style={{marginTop: 20}}>Log out</h3>
