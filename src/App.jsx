@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import CreateNewBlog from './components/CreateNewBlog'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -15,6 +16,8 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const newBlogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -74,6 +77,7 @@ const App = () => {
         likes: 0
       }
 
+      newBlogFormRef.current.toggleVisibility()
       const blog = await blogService.create(newBlog)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
@@ -95,6 +99,7 @@ const App = () => {
       }, 5000)
     }
   }
+
 
   if (user == null) {
     return (
@@ -132,13 +137,14 @@ const App = () => {
       {errorMessage && <p className='error'>{errorMessage}</p>}
       {message && <p className='msg'>{message}</p>}
 
-      <h3>Create a new blog</h3>
-      <CreateNewBlog 
-        createNewBlog={handleCreateNewBlog}
-        setTitle={setTitle} 
-        setAuthor={setAuthor}
-        setUrl={setUrl}
-      />
+      <Togglable buttonLabel='create new blog' ref={newBlogFormRef}>
+        <CreateNewBlog 
+          createNewBlog={handleCreateNewBlog}
+          setTitle={setTitle} 
+          setAuthor={setAuthor}
+          setUrl={setUrl}
+        />
+      </Togglable>
 
       <h3>List of blogs</h3>
       {blogs.map(blog =>
