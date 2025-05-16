@@ -13,10 +13,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState('')
 
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
   const newBlogFormRef = useRef()
 
   useEffect(() => {
@@ -65,31 +61,20 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreateNewBlog = async (event) => {
-    event.preventDefault()
-    console.log("Creating a new blog post:", title, author, url)
+  const handleCreateNewBlog = async (newBlog) => {
+    console.log("Creating a new blog post:", newBlog.title, newBlog.author, newBlog.url)
 
     try {
-      const newBlog = {
-        title: title,
-        author: author,
-        url: url,
-        likes: 0
-      }
-
       newBlogFormRef.current.toggleVisibility()
-      const blog = await blogService.create(newBlog)
+      await blogService.create(newBlog)
         .then(returnedBlog => {
           setBlogs(blogs.concat(returnedBlog))
           setMessage('Blog ' + newBlog.title + ' by ' + newBlog.author + ' was added!')
-          setTitle('')
-          setAuthor('')
-          setUrl('')
           setTimeout(() => {
             setMessage(null)
           }, 5000)
         })
-      console.log("New blog was added: ", blog)
+      console.log("New blog was added!")
 
     } catch (exception) {
       console.log("Error in creating a new blog: ", exception)
@@ -138,12 +123,7 @@ const App = () => {
       {message && <p className='msg'>{message}</p>}
 
       <Togglable buttonLabel='create new blog' ref={newBlogFormRef}>
-        <CreateNewBlog 
-          createNewBlog={handleCreateNewBlog}
-          setTitle={setTitle} 
-          setAuthor={setAuthor}
-          setUrl={setUrl}
-        />
+        <CreateNewBlog createNewBlog={handleCreateNewBlog}/>
       </Togglable>
 
       <h3>List of blogs</h3>
