@@ -7,6 +7,8 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [users, setUsers] = useState([])
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -20,7 +22,7 @@ const App = () => {
       setBlogs( blogs )
       console.log("The blogs are: ", blogs)
     })  
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -86,6 +88,30 @@ const App = () => {
   }
 
 
+  const handleLikeBlog = async (blogObject) => {
+    console.log("This function registers a new like to a blog!")
+    console.log("Blog to be updated: ", blogObject)
+
+    try {
+      await blogService.update(blogObject)
+        .then(returnedObject => {
+          console.log("Updating the blog was successful: ", returnedObject)
+          // TODO: Here remove the old blog from the blogs list and add the new updated one there!!!
+          setMessage('the blog ' + blogObject.title + ' got a new like!')
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        })
+    } catch (exception) {
+      console.log("Error in updating a blog: ", exception)
+      setErrorMessage('could not update the blog')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+
   if (user == null) {
     return (
       <div>
@@ -128,7 +154,7 @@ const App = () => {
 
       <h3>List of blogs</h3>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id} blog={blog} user={blog.user} handleLikeBlog={handleLikeBlog}/>
       )}
 
       <h3 style={{marginTop: 20}}>Log out</h3>
