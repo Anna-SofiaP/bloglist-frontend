@@ -19,18 +19,18 @@ const create = async newBlog => {
   }
 
   const response = await axios.post(baseUrl, newBlog, config)
-  console.log("Response from server when new blog was added: ", response)
-  
+  console.log('Response from server when new blog was added: ', response)
+
   return response.data
 }
 
 const update = async blogObject => {
   const config = {
-    headers: { Authorization: token},
+    headers: { Authorization: token },
   }
 
   const response = await axios.put(baseUrl + `/${blogObject.id}`, blogObject, config)
-  console.log("Response from server when blog was updated: ", response)
+  console.log('Response from server when blog was updated: ', response)
 
   return response.data
 }
@@ -38,11 +38,11 @@ const update = async blogObject => {
 
 const deleteBlog = async blogID => {
   const config = {
-    headers: { Authorization: token},
+    headers: { Authorization: token },
   }
 
   const response = await axios.delete(baseUrl + `/${blogID}`, config)
-  console.log("Response from server when the blog was deleted: ", response)
+  console.log('Response from server when the blog was deleted: ', response)
 
   return response.data
 }

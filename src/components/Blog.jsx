@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog}) => {
+const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog }) => {
   const [showAllInfo, setShowAllInfo] = useState(false)
 
   const blogStyle = {
@@ -16,10 +16,10 @@ const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog}) => {
   const likeThisBlog = (event, blog) => {
     event.preventDefault()
     const newLikes = blog.likes + 1
-    console.log("Liking a blog...")
-    console.log("Blog's previous likes: ", blog.likes)
-    console.log("Blog's new likes: ", newLikes)
-    console.log("Blogs user: ", blog.user.name)
+    console.log('Liking a blog...')
+    console.log('Blog\'s previous likes: ', blog.likes)
+    console.log('Blog\'s new likes: ', newLikes)
+    console.log('Blogs user: ', blog.user.name)
 
     const blogWithNewLikes = {
       id: blog.id,
@@ -35,7 +35,7 @@ const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog}) => {
 
   const deleteThisBlog = (event, blog) => {
     event.preventDefault()
-    console.log("Deleting a blog...")
+    console.log('Deleting a blog...')
     handleDeleteBlog(blog)
   }
 
@@ -56,14 +56,14 @@ const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog}) => {
           <button onClick={() => setShowAllInfo(true)}>show more information</button>
         }
         {loggedInUser.id === blog.user.id &&
-          <button className='deleteButton' 
+          <button className='deleteButton'
             onClick={(event) => deleteThisBlog(event, blog)}>
             delete this blog
           </button>
         }
       </div>
     </div>
-  ) 
+  )
 }
 
 export default Blog
