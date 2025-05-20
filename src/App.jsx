@@ -29,6 +29,7 @@ const App = () => {
     if (loggedInUserJSON) {
       const user = JSON.parse(loggedInUserJSON)
       setUser(user)
+      console.log("Logged in user: ", user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -122,6 +123,47 @@ const App = () => {
   }
 
 
+  const handleDeleteBlog = async (blogToDelete) => {
+    console.log("This function handles the deletion of a blog!")
+    console.log("Blog to delete: ", blogToDelete)
+    console.log("Blog id: ", blogToDelete.id)
+    console.log("User who added the blog: ", blogToDelete.user.name)
+    console.log("User who is deleting the blog: ", user.name)
+
+    if (window.confirm("Delete the blog " + blogToDelete.title + " by " + blogToDelete.user.name + "?")) {
+      try {
+        console.log("Deleting accepted!")
+        await blogService.deleteBlog(blogToDelete.id)
+          .then(() => {
+            console.log("Deleting blog was successful!")
+            const index = blogs.indexOf(blogToDelete)
+            if (index > -1) {
+              let newBlogs = [...blogs]
+              newBlogs.splice(index, 1)
+              console.log("Blogs when one was deleted: ", newBlogs)
+              //newBlogs.splice()
+              //console.log("New blog: ", newBlogs[index], " and its index: ", index)
+              //console.log("New blogs: ", newBlogs)
+              setBlogs(newBlogs)
+            }
+            setMessage('blog ' + blogToDelete.title + ' deleted')
+            setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          })
+
+      } catch (exception) {
+        console.log("Error in deleting the blog: ", exception)
+        setErrorMessage('could not delete the blog, a blog can be deleted only by its creator')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      }
+    }
+    console.log("Deleting not accepted...")
+  }
+
+
   if (user == null) {
     return (
       <div>
@@ -164,7 +206,12 @@ const App = () => {
 
       <h3>List of blogs</h3>
       {blogs.toSorted((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} user={blog.user} handleLikeBlog={handleLikeBlog}/>
+        <Blog 
+        key={blog.id} 
+        loggedInUser={user}
+        blog={blog}
+        handleLikeBlog={handleLikeBlog} 
+        handleDeleteBlog={handleDeleteBlog}/>
       )}
 
       <h3 style={{marginTop: 20}}>Log out</h3>

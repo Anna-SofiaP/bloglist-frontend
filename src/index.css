@@ -17,3 +17,14 @@
     border-width: 1px;
     border-radius: 15px;
 }
+
+.deleteButton {
+    color: red;
+    margin-left: 10px;
+}
+
+.likeButton {
+    background-color: lightskyblue;
+    border-radius: 3px;
+    border-color: lightskyblue;
+}

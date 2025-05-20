@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog, user, handleLikeBlog}) => {
+const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog}) => {
   const [showAllInfo, setShowAllInfo] = useState(false)
 
   const blogStyle = {
@@ -33,23 +33,33 @@ const Blog = ({ blog, user, handleLikeBlog}) => {
     handleLikeBlog(blogWithNewLikes, blog)
   }
 
+  const deleteThisBlog = (event, blog) => {
+    event.preventDefault()
+    console.log("Deleting a blog...")
+    handleDeleteBlog(blog)
+  }
+
   return (
     <div style={blogStyle}>
       <div>
         <p>{blog.title} by {blog.author}</p>
-      </div>
-      <div>
         {showAllInfo ?
           <>
             <button onClick={() => setShowAllInfo(false)}>hide information</button>
             <p>Url: {blog.url}</p>
             <p>Likes: {blog.likes}</p>
             <p>Added by: {blog.user.name}</p>
-            <button onClick={(event) => {
-              likeThisBlog(event, blog, user)}}>like this blog</button>
+            <button className='likeButton' onClick={(event) => {
+              likeThisBlog(event, blog)}}>like this blog</button>
           </>
           :
           <button onClick={() => setShowAllInfo(true)}>show more information</button>
+        }
+        {loggedInUser.id === blog.user.id &&
+          <button className='deleteButton' 
+            onClick={(event) => deleteThisBlog(event, blog)}>
+            delete this blog
+          </button>
         }
       </div>
     </div>
