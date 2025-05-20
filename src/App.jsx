@@ -7,7 +7,7 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [users, setUsers] = useState([])
+  //const [users, setUsers] = useState([])
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -163,7 +163,7 @@ const App = () => {
       </Togglable>
 
       <h3>List of blogs</h3>
-      {blogs.map(blog =>
+      {blogs.toSorted((a, b) => b.likes - a.likes).map(blog =>
         <Blog key={blog.id} blog={blog} user={blog.user} handleLikeBlog={handleLikeBlog}/>
       )}
 
