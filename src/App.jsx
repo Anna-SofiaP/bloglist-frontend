@@ -22,7 +22,7 @@ const App = () => {
       setBlogs( blogs )
       console.log("The blogs are: ", blogs)
     })  
-  }, [blogs])
+  }, [])
 
   useEffect(() => {
     const loggedInUserJSON = window.localStorage.getItem('loggedInUser')
@@ -88,15 +88,25 @@ const App = () => {
   }
 
 
-  const handleLikeBlog = async (blogObject) => {
+  const handleLikeBlog = async (blogObject, oldBlog) => {
     console.log("This function registers a new like to a blog!")
     console.log("Blog to be updated: ", blogObject)
+    console.log("The old blog is: ", oldBlog)
 
     try {
       await blogService.update(blogObject)
         .then(returnedObject => {
           console.log("Updating the blog was successful: ", returnedObject)
           // TODO: Here remove the old blog from the blogs list and add the new updated one there!!!
+          const index = blogs.indexOf(oldBlog)
+          if (index > -1) {
+            let newBlogs = [...blogs]
+            console.log("Old blog: ", newBlogs[index], " and its index: ", index)
+            newBlogs[index] = returnedObject
+            console.log("New blog: ", newBlogs[index], " and its index: ", index)
+            console.log("New blogs: ", newBlogs)
+            setBlogs(newBlogs)
+          }
           setMessage('the blog ' + blogObject.title + ' got a new like!')
           setTimeout(() => {
             setMessage(null)

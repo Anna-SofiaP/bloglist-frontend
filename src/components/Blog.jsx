@@ -13,9 +13,13 @@ const Blog = ({ blog, user, handleLikeBlog}) => {
     marginBottom: 10
   }
 
-  const likeThisBlog = (event, blog, user) => {
+  const likeThisBlog = (event, blog) => {
     event.preventDefault()
     const newLikes = blog.likes + 1
+    console.log("Liking a blog...")
+    console.log("Blog's previous likes: ", blog.likes)
+    console.log("Blog's new likes: ", newLikes)
+    console.log("Blogs user: ", blog.user.name)
 
     const blogWithNewLikes = {
       id: blog.id,
@@ -23,9 +27,10 @@ const Blog = ({ blog, user, handleLikeBlog}) => {
       author: blog.author,
       url: blog.url,
       likes: newLikes,
+      //user: blog.user
     }
 
-    handleLikeBlog(blogWithNewLikes)
+    handleLikeBlog(blogWithNewLikes, blog)
   }
 
   return (
@@ -39,10 +44,7 @@ const Blog = ({ blog, user, handleLikeBlog}) => {
             <button onClick={() => setShowAllInfo(false)}>hide information</button>
             <p>Url: {blog.url}</p>
             <p>Likes: {blog.likes}</p>
-            {user === undefined ?
-              <p>Added by: Unknown</p>
-              :
-              <p>Added by: {user.name}</p>}
+            <p>Added by: {blog.user.name}</p>
             <button onClick={(event) => {
               likeThisBlog(event, blog, user)}}>like this blog</button>
           </>
