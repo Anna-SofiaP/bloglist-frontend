@@ -49,3 +49,25 @@ test('renders more information about the blog when button has been pressed', asy
     expect(likes).toBeInTheDocument()
     expect(blogOwner).toBeInTheDocument()
 })
+
+test('when the \'like\' button is clicked two times, event handler is called two times', async () => {
+
+    const mockHandler = vi.fn()
+
+    render(
+        <Blog blog={blog} loggedInUser={user} handleLikeBlog={mockHandler}/>
+    )
+
+    const testUser = userEvent.setup()
+
+    // Click the 'show more information' button to show the 'like this blog' button
+    const moreButton = screen.getByText('show more information')
+    await testUser.click(moreButton)
+
+    // Click the 'like this blog' button two times
+    const likeButton = screen.getByText('like this blog')
+    await testUser.click(likeButton)
+    await testUser.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
+})
