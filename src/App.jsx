@@ -2,20 +2,21 @@ import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import CreateNewBlog from './components/CreateNewBlog'
 import Togglable from './components/Togglable'
+import Login from './components/Login'
+import CreateUserForm from './components/CreateUserForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import signupService from './services/signup'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  //const [users, setUsers] = useState([])
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [message, setMessage] = useState('')
 
   const newBlogFormRef = useRef()
+  const newUserFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs => {
@@ -34,8 +35,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
     console.log('Logging in with ', username, password)
 
     try {
@@ -46,10 +46,28 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setErrorMessage('wrong username or password')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
+  const handleCreateUser = async (username, name, password) => {
+    console.log('New user is being created with credentials: ', username, name, password)
+
+    try {
+      const user = await signupService.signup({ username, name, password })
+      console.log('Signed up user: ', user)
+
+      setMessage('new user created successfully! Now you can log in to the app')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+
+    } catch (exception) {
+      setErrorMessage('could not sign up, make sure you filled in all required information')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -169,27 +187,11 @@ const App = () => {
       <div>
         <h2>Log in to view your blogs</h2>
         {errorMessage && <p className='error'>{errorMessage}</p>}
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit">login</button>
-        </form>
+        <Login handleLogin={handleLogin} />
+        <h3>...or create a new user</h3>
+        <Togglable buttonLabel='sign up' ref={newUserFormRef}>
+          <CreateUserForm createUser={handleCreateUser}/>
+        </Togglable>
       </div>
     )
   }

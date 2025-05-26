@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
 
-  const hideWhenBlogFormVisible = { display: visible ? 'none' : '' }
-  const showWhenBlogFormVisible = { display: visible ? '' : 'none' }
+  const hideWhenFormVisible = { display: visible ? 'none' : '' }
+  const showWhenFormVisible = { display: visible ? '' : 'none' }
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -19,11 +19,10 @@ const Togglable = forwardRef((props, ref) => {
 
   return (
     <div>
-      <div style={hideWhenBlogFormVisible}>
+      <div style={hideWhenFormVisible}>
         <button onClick={toggleVisibility}>{props.buttonLabel}</button>
       </div>
-      <div style={showWhenBlogFormVisible}>
-        <h3>Create new blog</h3>
+      <div style={showWhenFormVisible}>
         {props.children}
         <button onClick={toggleVisibility}>cancel</button>
       </div>
