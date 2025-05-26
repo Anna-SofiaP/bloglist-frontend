@@ -23,6 +23,7 @@ const Login = ({ handleLogin }) => {
                         value={username}
                         name="Username"
                         onChange={({ target }) => setUsername(target.value)}
+                        data-testid='username'
                     />
                 </div>
                 <div className='formTextBox'>
@@ -32,6 +33,7 @@ const Login = ({ handleLogin }) => {
                         value={password}
                         name="Password"
                         onChange={({ target }) => setPassword(target.value)}
+                        data-testid='password'
                     />
                 </div>
                 <button className='signUpAndLogInButton' type="submit">login</button>
