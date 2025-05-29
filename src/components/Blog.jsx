@@ -40,7 +40,7 @@ const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       <div>
         <p>{blog.title} by {blog.author}</p>
         {showAllInfo ?
