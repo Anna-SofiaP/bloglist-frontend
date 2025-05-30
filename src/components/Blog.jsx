@@ -40,9 +40,9 @@ const Blog = ({ blog, loggedInUser, handleLikeBlog, handleDeleteBlog }) => {
   }
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div>
-        <p>{blog.title} by {blog.author}</p>
+        <p className='title'>{blog.title} by {blog.author}</p>
         {showAllInfo ?
           <>
             <button onClick={() => setShowAllInfo(false)}>hide information</button>
